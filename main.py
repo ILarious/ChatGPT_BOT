@@ -1,18 +1,23 @@
+import os
+from dotenv import load_dotenv, find_dotenv
+
 import openai
+
 from aiogram import Bot, types
 from aiogram.dispatcher import Dispatcher
 from aiogram.utils import executor
 
-from config import BOT_TOKEN_API, OPENAI_API_KEY
 
-bot = Bot(BOT_TOKEN_API)
-openai.api_key = OPENAI_API_KEY
+load_dotenv(find_dotenv())
+
+bot = Bot(os.getenv('BOT_TOKEN_API'))
+openai.api_key = os.getenv('OPENAI_API_KEY')
 
 dp = Dispatcher(bot=bot)
 
 @dp.message_handler(commands=['start'])
 async def start_cmd(message: types.Message) -> None:
-    await message.answer(text='это старт')
+    await message.answer(text='Этот бот для генерации ответов использует ChatGPT. Задай любой вопрос')
     await message.delete()
 
 @dp.message_handler()
@@ -27,9 +32,6 @@ async def send_sms_chatGPT(message: types.Message) -> None:
         presence_penalty=0.6,
         stop=[" Human:", " AI:"]
     )
-
-    print(f'Вопрос: {message.text}')
-    print(f'Ответ: {response["choices"][0]["text"]}')
 
     await message.answer(text=response['choices'][0]['text'])
 
