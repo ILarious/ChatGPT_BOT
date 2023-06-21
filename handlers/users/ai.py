@@ -10,7 +10,6 @@ import openai
 
 @dp.callback_query_handler(text='start')
 async def chat_start(call: types.CallbackQuery, state: FSMContext):
-
     await call.message.answer("Отправть сообщение, чтобы начать переписку", reply_markup=get_kb_chat())
     await AI.talk.set()
     await state.update_data(history=[{"question": None, "answer": None}])
@@ -20,6 +19,7 @@ async def chat_start(call: types.CallbackQuery, state: FSMContext):
 async def back(message: types.Message, state: FSMContext):
     TEXT = f"Всего доброго, {message.from_user.full_name}!\n" \
            f"Возвращайтесь снова!"
+
     await message.answer(
         text=TEXT,
         reply_markup=get_kb_start()
@@ -54,22 +54,24 @@ async def chat_talk(message: types.Message, state: FSMContext):
         data[0]['question'] = message.text
         d = {"role": "user", "content": data[0].get('question')}
         history.append(d)
+
     print(history)
+
     request = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=history,
         max_tokens=500,
         temperature=1,
     )
+
     resp_ai = request['choices'][0]['message']['content']
+
     data[-1]['answer'] = resp_ai.replace('\n', '')
-    # text = f"{message.from_user.username}\nQ:{data[-1]['question']}\nA:{data[-1]['answer']}"
     data.append({"question": None, "answer": None})
+
     if len(data) > 10:
         await state.update_data(history=[{"question": None, "answer": None}])
     await state.update_data(history=data)
 
     await msg.delete()
     await message.answer(resp_ai)
-
-
