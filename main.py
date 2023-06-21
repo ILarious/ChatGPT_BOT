@@ -2,7 +2,7 @@ from aiogram import executor
 from loader import dp
 
 import handlers
-from utils.set_bot_commands import default_commands
+from buttons.command_bot_sandwich import default_commands
 
 
 async def on_startup(dispatcher):

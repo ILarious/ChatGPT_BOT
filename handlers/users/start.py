@@ -2,7 +2,7 @@ from aiogram import types
 from aiogram.dispatcher.filters.builtin import CommandStart
 
 from loader import dp, bot
-from handlers.keyboards import get_kb_start
+from buttons.keyboards import get_kb_start
 from urls.urls import PREVIEW_PHOTO
 
 

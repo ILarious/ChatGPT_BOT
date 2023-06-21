@@ -3,7 +3,7 @@ from aiogram.dispatcher import FSMContext
 from aiogram.dispatcher.filters import Text
 
 from loader import dp, bot
-from handlers.keyboards import get_kb_chat, get_kb_start
+from buttons.keyboards import get_kb_chat, get_kb_start
 from states.talk_state import AI
 import openai
 
