@@ -10,7 +10,10 @@ import openai
 
 @dp.callback_query_handler(text='start')
 async def chat_start(call: types.CallbackQuery, state: FSMContext):
-    await call.message.answer("Отправть сообщение, чтобы начать переписку", reply_markup=get_kb_chat())
+    await call.message.answer(
+        text="Отправь сообщение, чтобы начать переписку",
+        reply_markup=get_kb_chat()
+    )
     await AI.talk.set()
     await state.update_data(history=[{"question": None, "answer": None}])
 
@@ -48,7 +51,10 @@ async def chat_talk(message: types.Message, state: FSMContext):
                 d = {"role": "user", "content": data[index]['question']}
                 history.append(d)
             else:
-                d = [{"role": "user", "content": data[index]['question']}, {"role": "assistant", "content": data[index].get('answer')}]
+                d = [
+                    {"role": "user", "content": data[index]['question']},
+                    {"role": "assistant", "content": data[index].get('answer')}
+                ]
                 history += d
     else:
         data[0]['question'] = message.text
